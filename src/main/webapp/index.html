@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html ng-app="ToDoApp">
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	 crossorigin="anonymous">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	 crossorigin="anonymous">
+<script src="angular.js"></script>
+<script src="app.js"></script>
+<script src="appDataSvc.js"></script>
+<script src="appController.js"></script>
+<style>
+        .strike {
+    text-decoration: line-through;
+        }
+    </style>
+	<title>Task Tracker</title>
+</head>
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">
+        <p style="font-size: 19px;font-family: cursive;">Task Tracker</p>
+      </a>
+    </div>
+  </div>
+</nav>	
+<body ng-controller="TodoCtrl as ctrl" style="background-image:url('images/paper.jpg');  width: 100%;">
+<div style="margin-left: 25px;margin-top: 20px;">	
+	<input type="text" placeholder="New Task" ng-model="ctrl.newTask.taskName"></input>
+	<button class="btn btn-default" ng-click="ctrl.addToList()">Add</button><br><br>
+</div>
+<div class="container">
+	<div class="row">
+		<div class="col-md-6">
+		<br><br>
+		<ul class="list-group">
+		<div class="preview" ng-if="ctrl.newTask.taskName.length"> <span style="color: white;font-size: 15px;">Preview:</span>
+		<li ng-class="ctrl.liClass(ctrl.newTask.striked)">
+			<span>
+					<label>{{ctrl.newTask.taskName}}</label>&nbsp;
+					<button class="btn btn-default">
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Edit"></span>
+					</button>
+					&nbsp;
+					<button class="btn btn-default">
+						<span class="glyphicon glyphicon-check" aria-hidden="true"></span>
+					</button>
+			</span>
+		</li><br><br><br>
+		</div>
+			<div ng-repeat="task in ctrl.toDoList">
+				 <li ng-class="ctrl.liClass(task.striked)">
+				 	<span ng-show="task.inEditMode"><input type="text" ng-model="task.taskName"></input>&nbsp;<button class="btn btn-default" ng-click="ctrl.toggleTool(task)"><span class="glyphicon glyphicon-floppy-saved" aria-hidden="true"></span></button></span>
+					<span ng-hide="task.inEditMode">
+						<label ng-class="{strike : task.striked}">{{task.taskName}}</label>&nbsp;
+
+						<button ng-if="!task.striked" class="btn btn-default" ng-click="ctrl.toggleTool(task)">
+							<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Edit"></span>
+						</button>
+						&nbsp;
+							<button class="btn btn-default" ng-click="ctrl.strikeTask(task,$index)">
+								<span ng-show="task.striked"><span class="glyphicon glyphicon-repeat" aria-hidden="true"></span></span><span ng-hide="task.striked"><span class="glyphicon glyphicon-check" aria-hidden="true"></span></span>
+							</button>
+					</span>
+				 </li>
+			</div>
+			
+		</ul>
+		</div>
+		<div class="col-md-6">
+			<input type="date" ng-model="ctrl.date" ng-change="ctrl.dateChanged()" placeholder="dd-MM-yyyy" style="margin-bottom: 15px;"></input>
+			<div class="progress">
+			  <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" ng-style="{'width':ctrl.successPercent+'%'}" style="min-width: 2em;">{{ctrl.successPercent}}%</div>
+			</div>
+		</div>
+	</div>		
+</div>
+</body>
+</html>
